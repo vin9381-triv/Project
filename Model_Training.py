@@ -14,6 +14,10 @@ words = tokenizer.tokenize(text)
 unique_words = np.unique(words)
 unique_word_index = dict((c, i) for i, c in enumerate(unique_words))
 
+# Save unique_word_index to a file for later use
+with open('unique_word_index.pkl', 'wb') as f:
+    pickle.dump(unique_word_index, f)
+
 WORD_LENGTH = 5
 prev_words, next_words = [], []
 
@@ -39,13 +43,20 @@ optimizer = RMSprop(learning_rate=0.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
 # Training and saving the model
-history = model.fit(X, Y, validation_split=0.05, batch_size=128, epochs=6, shuffle=True).history
+history = model.fit(X, Y, validation_split=0.05, batch_size=128, epochs=3, shuffle=True).history
 model.save('keras_next_word_model.h5')
 pickle.dump(history, open("history.p", "wb"))
 
-# Loading the model for prediction
+# Loading the model and unique_word_index for prediction
 model = load_model('keras_next_word_model.h5')
 history = pickle.load(open("history.p", "rb"))
+
+# Load the unique_word_index mapping
+with open('unique_word_index.pkl', 'rb') as f:
+    unique_word_index = pickle.load(f)
+
+# Reverse mapping from index to word
+indices_char = dict((i, c) for c, i in unique_word_index.items())
 
 # Prediction functions
 def prepare_input(text):
@@ -61,8 +72,6 @@ def sample(preds, top_n=3):
     exp_preds = np.exp(preds)
     preds = exp_preds / np.sum(exp_preds)
     return heapq.nlargest(top_n, range(len(preds)), preds.take)
-
-indices_char = dict((i, c) for c, i in unique_word_index.items())
 
 def predict_completion(text):
     completion = ''

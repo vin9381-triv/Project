@@ -1,26 +1,15 @@
 import numpy as np
 from keras.models import load_model
-from nltk.tokenize import RegexpTokenizer
+import pickle
 
-# Load the saved model
+# Load the saved model and the word mappings
 model = load_model('keras_next_word_model.h5')
 
-# Define the path to your text data (corpus)
-path = '1661-0.txt'  # Make sure this file exists in your working directory
+# Load the saved word-to-index and index-to-word mappings
+with open('unique_word_index.pkl', 'rb') as f:
+    unique_word_index = pickle.load(f)
 
-# Read the corpus (text file) and convert it to lowercase
-text = open(path, encoding='utf-8').read().lower()
-
-# Tokenize the text into words using RegexpTokenizer (removes punctuation)
-tokenizer = RegexpTokenizer(r'\w+')
-words = tokenizer.tokenize(text)
-
-# Get unique words from the corpus
-unique_words = np.unique(words)
-
-# Word to index mapping (for preparing input for the model)
-unique_word_index = dict((c, i) for i, c in enumerate(unique_words))  # Word-to-index dictionary
-indices_char = dict((i, c) for c, i in unique_word_index.items())  # Index-to-word dictionary (reverse mapping)
+indices_char = {i: c for c, i in unique_word_index.items()}  # Reverse mapping
 
 # The length of word sequences (number of words in each sequence)
 max_sequence_length = 5  # This is based on your model's input shape
