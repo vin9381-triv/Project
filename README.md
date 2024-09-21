@@ -1,4 +1,4 @@
-### * **Next-Word Prediction using LSTM** *
+### ***Next-Word Prediction using LSTM***
 
 ### **Description:**
 This project demonstrates a deep learning model for next-word prediction using an LSTM (Long Short-Term Memory) network. The model is trained on text data, where it learns to predict the next word in a sequence based on the previous words. The architecture includes an LSTM layer followed by a dense layer with a softmax activation function to output probabilities for the next word. The training process utilizes one-hot encoding to represent words and sequences.
