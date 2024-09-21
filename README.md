@@ -99,4 +99,4 @@ So, buckle up as we explore the fascinating journey of next-word prediction, whe
 ### 7. Example Usage
 - Accept user input and predict the next word(s) using the pre-trained model.
 
-Feel free to clone the repo and try the prediction on different text inputs!
+### Feel free to clone the repo and try the prediction on different text inputs!
