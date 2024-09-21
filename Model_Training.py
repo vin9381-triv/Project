@@ -73,26 +73,33 @@ def sample(preds, top_n=3):
     preds = exp_preds / np.sum(exp_preds)
     return heapq.nlargest(top_n, range(len(preds)), preds.take)
 
-def predict_completion(text):
-    completion = ''
-    while True:
-        x = prepare_input(text)
-        preds = model.predict(x, verbose=0)[0]
-        next_index = sample(preds, top_n=1)[0]
-        next_char = indices_char[next_index]
-        completion += next_char
-        text = text[1:] + next_char
-        if next_char == ' ':
-            return completion
+# Modify the predict_completion function to limit recursion
+def predict_completion(text, max_len=20):
+    if len(text) >= max_len:
+        return ''
+    
+    x = prepare_input(text)
+    preds = model.predict(x, verbose=0)[0]
+    next_index = sample(preds, 1)[0]
+    next_char = indices_char[next_index]
+    
+    return next_char + predict_completion(text[1:] + next_char, max_len)
 
-def predict_completions(text, max_len=20):
-    return predict_completion(text[:max_len])
+
+
+def predict_completions(text, n=3):
+    x = prepare_input(text)
+    preds = model.predict(x, verbose=0)[0]
+    next_indices = sample(preds, n)
+    return [indices_char[idx] + predict_completion(text[1:] + indices_char[idx]) for idx in next_indices]
 
 # Sample quotes for prediction
 quotes = [
     "It is not a lack of love, but a lack of friendship that makes unhappy marriages.",
     "That which does not kill us makes us stronger.",
-    "I'm not upset that you lied to me, I'm upset that from now on I can't believe you."
+    "I'm not upset that you lied to me, I'm upset that from now on I can't believe you.",
+    "And those who were seen dancing were thought to be insane by those who could not hear the music.",
+    "It is hard enough to remember my opinions, without also remembering my reasons for them!"
 ]
 
 for q in quotes:
