@@ -34,6 +34,7 @@ for i, each_words in enumerate(prev_words):
     Y[i, unique_word_index[next_words[i]]] = 1
 
 # Model definition
+#! Add one more hidden layer, regularization and drop out
 model = Sequential()
 model.add(LSTM(128, input_shape=(WORD_LENGTH, len(unique_words))))
 model.add(Dense(len(unique_words)))
@@ -43,7 +44,7 @@ optimizer = RMSprop(learning_rate=0.01)
 model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
 # Training and saving the model
-history = model.fit(X, Y, validation_split=0.05, batch_size=128, epochs=3, shuffle=True).history
+history = model.fit(X, Y, validation_split=0.05, batch_size=128, epochs=25, shuffle=True).history
 model.save('keras_next_word_model.h5')
 pickle.dump(history, open("history.p", "wb"))
 
