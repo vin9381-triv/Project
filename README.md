@@ -94,8 +94,33 @@ With the basics covered, let's dive into the project by reviewing the files in o
 - **b.** Loop through each quote, take the first 40 characters, and print the top N most likely word completions for each quote.
 
 ---
-Thank you for following through! This project demonstrates how RNNs and LSTMs can be used for next-word prediction tasks by leveraging sequential data.
-
 ### Original Article Link:
 This project was inspired by and referenced from the article below:
 [https://thecleverprogrammer.com/2020/07/20/next-word-prediction-model/](https://thecleverprogrammer.com/2020/07/20/next-word-prediction-model/)
+
+---
+### Text Prediction From User Input:
+In the `Text_Prediction.py` file, we use the trained model to create a script that takes user input and predicts the next words in the sequence. This script loads the trained model, prepares the input text, and predicts the next word using the LSTM model.
+
+1. **Loading the Model and Mappings:**
+   - The pre-trained LSTM model is loaded using `load_model('keras_next_word_model.h5')`.
+   - The word-to-index and index-to-word mappings, which were saved during training, are loaded from the `unique_word_index.pkl` file. This allows the model to retrive words and their corresponding numeric indices.
+
+2. **Preparing the Input:**
+   - The user's input sentence is tokenized into words and then padded to match the model's input sequence length (in our case, 5 words).
+   - 0ne-hot encoding is performed on the input sequence, where each word in the sequence is converted into a binary vector based on its index in the vocabulary.
+
+3. **Predicting the Next Word:**
+   - The one-hot encoded input is fed into the trained LSTM model, which predicts the probabilities for the next word in the sequence.
+   - The word with the highest probability is chosen as the next word, we use the `np.argmax()` function to retrieve its index, which is then mapped back to the corresponding word.
+
+4. **Generating a Sequence of Words:**
+   - After predicting the next word, it is appended to the input sequence, and the process is repeated for a predefined number of words (e.g., 10 words) or until a punctuation mark (like `.`) is predicted.
+   - The script continues to generate words recursively based on our input, creating a meaningful sentence or sequence of words.
+
+5. **User Interaction:**
+   - The script prompts the user for a sentence, which serves as the input text for the word prediction model.
+   - After processing the input, the script outputs the predicted continuation of the sentence based on the learned patterns in the training data.
+
+Thank you for following through! This project demonstrates how RNNs and LSTMs can be used for next-word prediction tasks by leveraging sequential data.
+
