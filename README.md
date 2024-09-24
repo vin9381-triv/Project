@@ -94,12 +94,12 @@ With the basics covered, let's dive into the project by reviewing the files in o
 - **b.** Loop through each quote, take the first 40 characters, and print the top N most likely word completions for each quote.
 
 ---
-### Original Article Link:
+## Original Article Link:
 This project was inspired by and referenced from the article below:
 [https://thecleverprogrammer.com/2020/07/20/next-word-prediction-model/](https://thecleverprogrammer.com/2020/07/20/next-word-prediction-model/)
 
 ---
-### Text Prediction From User Input:
+## Text Prediction From User Input:
 In the `Text_Prediction.py` file, we use the trained model to create a script that takes user input and predicts the next words in the sequence. This script loads the trained model, prepares the input text, and predicts the next word using the LSTM model.
 
 1. **Loading the Model and Mappings:**
